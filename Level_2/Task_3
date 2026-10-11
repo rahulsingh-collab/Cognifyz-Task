@@ -1,0 +1,154 @@
+"""
+COGNIFYZ TECHNOLOGIES
+
+Project: Task Management System
+
+Presented By: Rahul Singh
+Role: Software Development Intern
+Task: Level 2 - Task 3
+
+ABOUT:
+A Python-based console application to manage daily tasks.
+
+KEY FEATURES:
+
+* Create Tasks
+* View Tasks
+* Update Tasks
+* Delete Tasks
+* Input Validation
+
+TECHNOLOGY:
+Python | Visual Studio Code
+
+Thank You!
+"""
+
+class Task:
+    def __init__(self, task_id, title, description):
+        self.task_id = task_id
+        self.title = title
+        self.description = description
+
+
+tasks = []
+next_id = 1
+
+
+# CREATE TASK
+def create_task():
+    global next_id
+
+    title = input("Enter task title: ").strip()
+    description = input("Enter task description: ").strip()
+
+    if not title:
+        print("Task title cannot be empty!")
+        return
+
+    task = Task(next_id, title, description)
+    tasks.append(task)
+
+    print("\nTask created successfully!")
+    print("Your Task ID is:", next_id)
+
+    next_id += 1
+
+
+# READ / VIEW TASKS
+def read_tasks():
+    print("\n========== ALL TASKS ==========")
+
+    if len(tasks) == 0:
+        print("No tasks found! Please create a task first.")
+        return
+
+    for task in tasks:
+        print("-------------------------------")
+        print("Task ID:", task.task_id)
+        print("Title:", task.title)
+        print("Description:", task.description)
+
+    print("===============================")
+
+
+# UPDATE TASK
+def update_task():
+    if len(tasks) == 0:
+        print("No tasks available to update.")
+        return
+
+    try:
+        task_id = int(input("Enter Task ID to update: "))
+    except ValueError:
+        print("Please enter a valid numeric Task ID.")
+        return
+
+    for task in tasks:
+        if task.task_id == task_id:
+            new_title = input("Enter new title: ").strip()
+            new_description = input("Enter new description: ").strip()
+
+            if not new_title:
+                print("Task title cannot be empty!")
+                return
+
+            task.title = new_title
+            task.description = new_description
+
+            print("Task updated successfully!")
+            return
+
+    print("Task ID not found!")
+
+
+# DELETE TASK
+def delete_task():
+    if len(tasks) == 0:
+        print("No tasks available to delete.")
+        return
+
+    try:
+        task_id = int(input("Enter Task ID to delete: "))
+    except ValueError:
+        print("Please enter a valid numeric Task ID.")
+        return
+
+    for task in tasks:
+        if task.task_id == task_id:
+            tasks.remove(task)
+            print("Task deleted successfully!")
+            return
+
+    print("Task ID not found!")
+
+
+# MAIN MENU
+while True:
+    print("\n===== TASK MANAGEMENT SYSTEM =====")
+    print("1. Create Task")
+    print("2. View Tasks")
+    print("3. Update Task")
+    print("4. Delete Task")
+    print("5. Exit")
+
+    choice = input("Enter your choice (1-5): ").strip()
+
+    if choice == "1":
+        create_task()
+
+    elif choice == "2":
+        read_tasks()
+
+    elif choice == "3":
+        update_task()
+
+    elif choice == "4":
+        delete_task()
+
+    elif choice == "5":
+        print("Thank you for using Task Management System!")
+        break
+
+    else:
+        print("Invalid choice! Please enter a number from 1 to 5.")

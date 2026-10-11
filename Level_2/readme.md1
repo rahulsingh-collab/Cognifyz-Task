@@ -1,0 +1,59 @@
+🌡️ Temperature Converter
+
+Cognifyz Technologies Internship — Level 2, Task 4
+
+- Developer: Rahul Singh
+- Role: Software Development Intern
+- Language: Python
+- IDE: Visual Studio Code
+
+📌 Description
+
+A simple Python application that converts temperatures between Celsius, Fahrenheit, and Kelvin.
+
+✨ Features
+
+- Convert Celsius to Fahrenheit and Kelvin
+- Convert Fahrenheit to Celsius and Kelvin
+- Convert Kelvin to Celsius and Fahrenheit
+- Accept user input
+- Display converted temperature
+- Basic input validation
+
+🛠️ Technologies Used
+
+- Python 3
+- Visual Studio Code
+
+▶️ How to Run
+
+1. Download or clone this repository.
+2. Open the project in VS Code.
+3. Open the terminal.
+4. Run:
+
+python Task_4.py
+
+💻 Sample Output
+
+===== Temperature Converter =====
+
+1. Celsius to Fahrenheit
+2. Fahrenheit to Celsius
+3. Celsius to Kelvin
+4. Kelvin to Celsius
+
+Enter your choice: 1
+Enter temperature in Celsius: 25
+
+Converted Temperature: 77.0°F
+
+🎯 Learning Outcomes
+
+- Python functions
+- Conditional statements
+- User input and output
+- Mathematical calculations
+- Input validation
+
+Developed by Rahul Singh | Cognifyz Technologies

@@ -1,0 +1,209 @@
+
+import os
+
+
+FILE_NAME = "tasks.txt"
+
+
+class Task:
+    def __init__(self, task_id, title, description):
+        self.task_id = task_id
+        self.title = title
+        self.description = description
+
+
+tasks = []
+next_id = 1
+
+
+# SAVE TASKS TO FILE
+def save_tasks():
+    try:
+        with open(FILE_NAME, "w", encoding="utf-8") as file:
+            for task in tasks:
+                file.write(
+                    f"{task.task_id}|{task.title}|{task.description}\n"
+                )
+        return True
+
+    except OSError as error:
+        print("Error saving tasks:", error)
+        return False
+
+
+# LOAD TASKS FROM FILE
+def load_tasks():
+    global next_id
+
+    if not os.path.exists(FILE_NAME):
+        return
+
+    try:
+        with open(FILE_NAME, "r", encoding="utf-8") as file:
+            for line in file:
+                line = line.rstrip("\n")
+                if not line:
+                    continue
+
+                parts = line.split("|", 2)
+
+                if len(parts) != 3:
+                    print("Skipping invalid task record.")
+                    continue
+
+                try:
+                    task_id = int(parts[0])
+                except ValueError:
+                    print("Skipping task with invalid ID.")
+                    continue
+
+                task = Task(task_id, parts[1], parts[2])
+                tasks.append(task)
+
+        if tasks:
+            next_id = max(task.task_id for task in tasks) + 1
+
+    except (OSError, UnicodeError) as error:
+        print("Error loading tasks:", error)
+
+
+# CREATE TASK
+def create_task():
+    global next_id
+
+    title = input("Enter task title: ").strip()
+    description = input("Enter task description: ").strip()
+
+    if not title:
+        print("Task title cannot be empty!")
+        return
+
+    task = Task(next_id, title, description)
+    tasks.append(task)
+
+    if save_tasks():
+        print("Task created and saved successfully!")
+        print("Task ID:", next_id)
+        next_id += 1
+    else:
+        tasks.remove(task)
+        print("Task could not be saved.")
+
+
+# VIEW TASKS
+def read_tasks():
+    print("\n========== ALL TASKS ==========")
+
+    if not tasks:
+        print("No tasks found.")
+        return
+
+    for task in tasks:
+        print("-------------------------------")
+        print("Task ID:", task.task_id)
+        print("Title:", task.title)
+        print("Description:", task.description)
+
+    print("===============================")
+
+
+# UPDATE TASK
+def update_task():
+    if not tasks:
+        print("No tasks available to update.")
+        return
+
+    try:
+        task_id = int(input("Enter Task ID to update: "))
+    except ValueError:
+        print("Please enter a valid numeric ID.")
+        return
+
+    for task in tasks:
+        if task.task_id == task_id:
+            old_title = task.title
+            old_description = task.description
+
+            new_title = input("Enter new title: ").strip()
+            new_description = input("Enter new description: ").strip()
+
+            if not new_title:
+                print("Title cannot be empty!")
+                return
+
+            task.title = new_title
+            task.description = new_description
+
+            if save_tasks():
+                print("Task updated and saved successfully!")
+            else:
+                task.title = old_title
+                task.description = old_description
+                print("Update could not be saved.")
+
+            return
+
+    print("Task ID not found!")
+
+
+# DELETE TASK
+def delete_task():
+    if not tasks:
+        print("No tasks available to delete.")
+        return
+
+    try:
+        task_id = int(input("Enter Task ID to delete: "))
+    except ValueError:
+        print("Please enter a valid numeric ID.")
+        return
+
+    for task in tasks:
+        if task.task_id == task_id:
+            tasks.remove(task)
+
+            if save_tasks():
+                print("Task deleted successfully!")
+            else:
+                tasks.append(task)
+                print("Deletion could not be saved.")
+
+            return
+
+    print("Task ID not found!")
+
+
+# MAIN PROGRAM
+load_tasks()
+
+print("Task data loaded from file.")
+
+while True:
+    print("\n===== TASK MANAGEMENT SYSTEM =====")
+    print("1. Create Task")
+    print("2. View Tasks")
+    print("3. Update Task")
+    print("4. Delete Task")
+    print("5. Exit")
+
+    choice = input("Enter your choice (1-5): ").strip()
+
+    if choice == "1":
+        create_task()
+
+    elif choice == "2":
+        read_tasks()
+
+    elif choice == "3":
+        update_task()
+
+    elif choice == "4":
+        delete_task()
+
+    elif choice == "5":
+        print("Tasks are stored in", FILE_NAME)
+        print("Thank you for using Task Management System!")
+        break
+
+    else:
+        print("Invalid choice! Please enter 1 to 5.")
